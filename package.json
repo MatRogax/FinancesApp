@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "start:nest": " cd finances-backend && nest start --watch",
+    "start:flutter": "cd FinancesApp && flutter run -d chrome",
+    "start:all": "concurrently \"npm run start:nest\" \"npm run start:flutter\""
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
