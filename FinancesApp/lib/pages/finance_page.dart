@@ -25,7 +25,7 @@ class _FinanceAppState extends State<FinanceApp> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Finance App',
+                        'Finances',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,

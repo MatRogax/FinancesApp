@@ -1,6 +1,6 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -8,11 +8,37 @@ generator client {
 }
 
 model Budget {
-
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @unique @default(autoincrement())
   name      String
   value     Decimal
   createdAt String
-  updateAt  String
+  updatedAt String
+}
 
+model InvestmentCategory {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  description String?
+  investments Investment[]  
+  createdAt   String   
+  updatedAt   String   
+}
+
+model Investment {
+  id          String             @id @default(uuid())
+  name        String
+  type        InvestmentType
+  details     Json               
+  categoryId  String
+  category    InvestmentCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt   String          
+  updatedAt   String          
+}
+
+enum InvestmentType {
+  FUND
+  CRYPTOCURRENCY
+  STOCK
+  BOND
+  OTHER
 }

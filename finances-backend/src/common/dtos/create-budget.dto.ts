@@ -11,11 +11,4 @@ export class CreateBudgetDto {
     @IsDecimal()
     value: Decimal;
 
-    @IsNotEmpty()
-    @IsString()
-    createdAt: string;
-
-    @IsNotEmpty()
-    @IsString()
-    updateAt: string;
 }

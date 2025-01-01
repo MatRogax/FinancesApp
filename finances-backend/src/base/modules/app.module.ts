@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { BudgetModule } from './budget.module';
 
 @Module({
-  imports: [],
+  imports: [BudgetModule],
   controllers: [],
-  providers: [BudgetModule],
+  providers: [],
 })
 export class AppModule { }

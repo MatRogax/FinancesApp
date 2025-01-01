@@ -1,5 +1,5 @@
 import { CreateBudgetDto } from '@dtos/create-budget.dto';
-import { Controller, Post, Body, Get, Put, Headers, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Put, Delete, Param } from '@nestjs/common';
 import { Budget } from '@prisma/client';
 import { AbstractBudgetRepository } from '@repositories/abstract-budget.repository';
 
@@ -19,19 +19,19 @@ export class BudgetController {
     return budgets;
   }
 
-  @Put('upgrade-budget')
-  async upgradeBudget(@Headers('id') id: number, @Body() budget: CreateBudgetDto): Promise<Budget> {
+  @Put('upgrade-budget/:id')
+  async upgradeBudget(@Param('id') id: number, @Body() budget: CreateBudgetDto): Promise<Budget> {
     const updated = await this.budgetRepository.updateBudget(id, budget);
     return updated;
   }
 
-  @Delete('deleter-budget')
-  async deleteBudget(@Headers('id') id: number): Promise<void> {
+  @Delete('deleter-budget/:id')
+  async deleteBudget(@Param('id') id: number): Promise<void> {
     await this.budgetRepository.deleteBudget(id);
   }
 
   @Get(':id')
-  async getBudget(@Headers('id') id: number): Promise<Budget> {
+  async getBudget(@Param('id') id: number): Promise<Budget> {
     const budget = await this.budgetRepository.findBudgetByid(id);
     return budget;
   }

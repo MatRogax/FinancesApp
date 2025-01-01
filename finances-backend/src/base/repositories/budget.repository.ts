@@ -4,32 +4,45 @@ import { AbstractBudgetRepository } from './abstract-budget.repository';
 import { CreateBudgetDto } from '@dtos/create-budget.dto';
 import { Budget } from '@prisma/client';
 import { UpdateBudgetDto } from '@dtos/update-budget.dto';
+import { Utils } from '@utils/utils';
 
 @Injectable()
 export class BudgetRepository implements AbstractBudgetRepository {
   constructor(private readonly prismaService: PrismaService) { }
-  createBudget(budget: CreateBudgetDto): Promise<Budget> {
+
+  async createBudget(budget: CreateBudgetDto): Promise<Budget> {
+    const currentDate = new Date();
+    const formattedDate = Utils.formatDatetime(currentDate);
     try {
-      const newBudget = this.prismaService.budget.create({
-        data: budget
-      })
+      const newBudget = await this.prismaService.budget.create({
+        data: {
+          ...budget,
+          createdAt: formattedDate,
+          updatedAt: formattedDate,
+        }
+      });
       return newBudget;
     } catch (err) {
-      throw new BadRequestException(err.message);
+      throw new BadRequestException(err);
     }
   }
-  updateBudget(id: number, budget: UpdateBudgetDto): Promise<Budget> {
+  async updateBudget(id: number, budget: UpdateBudgetDto): Promise<Budget> {
+    const currentDate = new Date();
+    const formattedDate = Utils.formatDatetime(currentDate);
     try {
       const updatedBudget = this.prismaService.budget.update({
         where: { id: id },
-        data: budget
+        data: {
+          ...budget,
+          updatedAt: formattedDate,
+        }
       })
       return updatedBudget;
     } catch (err) {
       throw new BadRequestException(err.message);
     }
   }
-  deleteBudget(id: number): Promise<Budget> {
+  async deleteBudget(id: number): Promise<Budget> {
     try {
       const deletedBudget = this.prismaService.budget.delete({
         where: { id: id }
@@ -39,7 +52,7 @@ export class BudgetRepository implements AbstractBudgetRepository {
       throw new BadRequestException(err.message);
     }
   }
-  getAllBudgets(): Promise<Budget[]> {
+  async getAllBudgets(): Promise<Budget[]> {
     try {
       const allBudgets = this.prismaService.budget.findMany()
       return allBudgets;
@@ -47,7 +60,7 @@ export class BudgetRepository implements AbstractBudgetRepository {
       throw new InternalServerErrorException(err.message);
     }
   }
-  findBudgetByid(id: number): Promise<Budget> {
+  async findBudgetByid(id: number): Promise<Budget> {
     try {
       const foundBudget = this.prismaService.budget.findFirst({
         where: { id: id }
