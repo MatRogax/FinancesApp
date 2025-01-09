@@ -1,4 +1,7 @@
+import 'package:finances/pages/finance_formatters.dart';
 import 'package:finances/utils/constants.dart';
+import 'package:finances/widgets/ContainerField.dart';
+import 'package:finances/widgets/WidgetTextField.dart';
 import 'package:flutter/material.dart';
 
 class FinanceApp extends StatefulWidget {
@@ -9,80 +12,107 @@ class FinanceApp extends StatefulWidget {
 }
 
 class _FinanceAppState extends State<FinanceApp> {
+  TextEditingController searchFieldController = TextEditingController(text: "");
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
+        child: SizedBox(
+          height: size.height * 2,
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Finances',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        'data atual',
-                        style: TextStyle(
-                          color: primaryColor,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: containsColor,
-                    ),
-                    padding: const EdgeInsets.all(12),
-                    child: const Icon(
-                      Icons.notifications_none_rounded,
-                      color: Color.fromARGB(255, 124, 124, 124),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              //Pesquisar por data
               Container(
-                decoration: BoxDecoration(color: containsColor, borderRadius: BorderRadius.circular(12)),
-                padding: EdgeInsets.all(12),
-                child: const Row(
+                height: size.height * 0.3,
+                color: Colors.green,
+                child: Column(
                   children: [
-                    Icon(
-                      Icons.search,
-                      color: textPrimaryColor,
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: size.height * 0.02,
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "Finances App",
+                              style: TextStyle(
+                                color: maskInbackgroundColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.circle_notifications_sharp,
+                              size: 35,
+                              color: maskInbackgroundColor,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "search",
-                      style: TextStyle(color: textPrimaryColor),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: size.height * 0.025,
+                      ),
+                      child: ContainerField(
+                        backgroundField: maskInbackgroundColor,
+                        size: size,
+                        child: WidgetTextField(
+                          labeltext: "Buscar...",
+                          prefixFieldIcon: const Icon(Icons.search),
+                          controllerText: searchFieldController,
+                          inputType: TextInputType.text,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 25),
-              //implementar calendario mensal
+              )
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blue,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              onPressed: () => null,
+              icon: Icon(
+                Icons.home,
+                color: Colors.red,
+              ),
+            ),
+            IconButton(
+              onPressed: () => null,
+              icon: Icon(
+                Icons.home,
+                color: Colors.red,
+              ),
+            ),
+            IconButton(
+              onPressed: () => null,
+              icon: Icon(
+                Icons.home,
+                color: Colors.red,
+              ),
+            ),
+            IconButton(
+              onPressed: () => null,
+              icon: Icon(
+                Icons.home,
+                color: Colors.red,
+              ),
+            ),
+          ],
         ),
       ),
     );
