@@ -7,38 +7,99 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Budget {
-  id        Int      @id @unique @default(autoincrement())
-  name      String
-  value     Decimal
-  createdAt String
-  updatedAt String
+model User {
+  id           String       @id @default(uuid())
+  name         String
+  email        String       @unique
+  password     String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  expenses     Expense[]
+  investments  Investment[]
+  budgets      Budget[]
 }
 
-model InvestmentCategory {
-  id          String        @id @default(uuid())
-  name        String        @unique
-  description String?
-  investments Investment[]  
-  createdAt   String   
-  updatedAt   String   
+model Expense {
+  id          String       @id @default(uuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  categoryId  String
+  category    Category     @relation(fields: [categoryId], references: [id])
+  type        ExpenseType  
+  description String
+  amount      Decimal
+  date        DateTime
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Budget {
+  id        Int          @id @default(autoincrement())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  name      String
+  value     Decimal
+  type      BudgetType   
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 model Investment {
   id          String             @id @default(uuid())
+  userId      String
+  user        User               @relation(fields: [userId], references: [id])
   name        String
-  type        InvestmentType
-  details     Json               
+  type        InvestmentType     
+  details     Json
   categoryId  String
-  category    InvestmentCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  createdAt   String          
-  updatedAt   String          
+  category    Category           @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  amount      Decimal
+  date        DateTime
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+}
+
+model Category {
+  id           String         @id @default(uuid())
+  name         String         @unique
+  type         CategoryType   
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  expenses     Expense[]
+  investments  Investment[]
+}
+
+enum CategoryType {
+  EXPENSE      
+  INVESTMENT   
+}
+
+enum ExpenseType {
+  SIGNATURES       
+  UTILITIES        
+  TRANSPORTATION   
+  ENTERTAINMENT    
+  FOOD             
+  HEALTH           
+  EDUCATION        
+  MISCELLANEOUS    
+}
+
+enum BudgetType {
+  SPORTS           
+  UTILITIES        
+  GAMES            
+  CLOTHING         
+  ENTERTAINMENT    
+  FOOD             
+  OTHER            
 }
 
 enum InvestmentType {
-  FUND
-  CRYPTOCURRENCY
-  STOCK
-  BOND
-  OTHER
+  FUND             
+  CRYPTOCURRENCY   
+  STOCK            
+  BOND             
+  REAL_ESTATE      
+  OTHER            
 }

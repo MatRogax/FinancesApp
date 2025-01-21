@@ -5,10 +5,11 @@ export class CreateBudgetDto {
 
     @IsString()
     @IsNotEmpty()
-    name: string;
+    name!: string;
 
     @IsNotEmpty()
     @IsDecimal()
-    value: Decimal;
+    value!: Decimal;
+
 
 }
