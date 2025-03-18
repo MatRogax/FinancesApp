@@ -1,15 +1,18 @@
-import { Decimal } from "@prisma/client/runtime/library";
-import { IsDecimal, IsNotEmpty, IsString } from "class-validator";
+import { BudgetType } from '@prisma/client';
+import { IsString, IsDecimal, IsEnum } from 'class-validator';
 
-export class CreateBudgetDto {
+export class BudgetDTO {
 
     @IsString()
-    @IsNotEmpty()
+    userId!: string;
+
+    @IsString()
     name!: string;
 
-    @IsNotEmpty()
     @IsDecimal()
-    value!: Decimal;
+    value!: number;
 
+    @IsEnum(BudgetType)
+    type!: BudgetType;
 
 }

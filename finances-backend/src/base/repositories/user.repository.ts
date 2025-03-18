@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AbstractUserRepository } from './abstract-user.repository';
 import { User } from '@prisma/client';
 import { UpdateUserDto } from '@dtos/update-user.dto';
@@ -12,22 +12,11 @@ export class UserRepository implements AbstractUserRepository {
     throw new Error('Method not implemented.' + email + password);
   }
   async createUser(user: CreateUserDto): Promise<User> {
-
-    const userExists = await this.prisma.user.count({
-      where: {
-        email: user.email,
-      },
-    });
-
-    if (userExists > 0) {
-      throw new ConflictException('Usuário já cadastrado');
-    }
-
     try {
       const createUser = await this.prisma.user.create({ data: user });
       return createUser;
-    } catch (error: any) {
-      throw new BadRequestException("erro ao criar usuário" + error.message);
+    } catch {
+      throw new BadRequestException("erro ao criar usuário");
     }
   }
   async updateUser(id: string, user: UpdateUserDto): Promise<User> {
@@ -36,9 +25,12 @@ export class UserRepository implements AbstractUserRepository {
     return updateUser;
   }
   async deleteUser(id: string): Promise<User> {
-    await this.findUserByid(id);
-    const response = await this.prisma.user.delete({ where: { id: id } });
-    return response;
+    try {
+      const response = await this.prisma.user.delete({ where: { id: id } });
+      return response;
+    } catch {
+      throw new BadRequestException("Erro ao deletar usuário");
+    }
   }
   getAllUsers(): Promise<User[]> {
     throw new Error('Method not implemented.');
@@ -48,8 +40,8 @@ export class UserRepository implements AbstractUserRepository {
       const findedUser = await this.prisma.user.findUnique({ where: { id: id } });
       return findedUser!;
 
-    } catch (error: any) {
-      throw new NotFoundException("erro ao encontrar usuário: " + error.message);
+    } catch {
+      throw new NotFoundException("erro ao encontrar usuário ");
     }
   }
 }

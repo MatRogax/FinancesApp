@@ -12,3 +12,4 @@ import { AbstractBudgetRepository } from '@repositories/abstract-budget.reposito
   exports: [AbstractBudgetRepository],
 })
 export class BudgetModule { }
+
