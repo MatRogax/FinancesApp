@@ -8,25 +8,25 @@ import { AbstractBudgetRepository } from '@repositories/abstract-budget.reposito
 export class BudgetController {
   constructor(private readonly budgetRepository: AbstractBudgetRepository) { }
 
-  @Post('create-budget')
+  @Post('create')
   async create(@Body() budget: BudgetDTO): Promise<Budget> {
     const created = await this.budgetRepository.createBudget(budget);
     return created;
   }
 
-  @Get('all-budgets')
+  @Get('all')
   async getAll(): Promise<Budget[]> {
     const budgets = await this.budgetRepository.getAllBudgets();
     return budgets;
   }
 
-  @Put('upgrade-budget/:id')
+  @Put('upgrade/:id')
   async upgradeBudget(@Param('id') id: number, @Body() budget: UpdateBudgetDto): Promise<Budget> {
     const updated = await this.budgetRepository.updateBudget(id, budget);
     return updated;
   }
 
-  @Delete('deleter-budget/:id')
+  @Delete('delete/:id')
   async deleteBudget(@Param('id') id: number): Promise<void> {
     await this.budgetRepository.deleteBudget(id);
   }
